@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login Admin - TokoHijau{% endblock %}
+
+{% block sidebar %}{% endblock %} <!-- Hilangkan sidebar di login -->
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+  <h2>Login Admin</h2>
+  <form onsubmit="return loginAdmin()">
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button type="submit" class="btn-login">Masuk</button>
+  </form>
+  <div class="footer">
+    © 2025 <b>TokoHijau</b> — Panel Admin
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/login.js' %}"></script>
+{% endblock %}

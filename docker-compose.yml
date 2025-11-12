@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: eprokesba_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: rootsecure123!
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: eprokesba_phpmyadmin
+    restart: always
+    ports:
+      - "8082:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: ${DB_USER}
+      PMA_PASSWORD: ${DB_PASSWORD}
+      UPLOAD_LIMIT: 256M
+    depends_on:
+      - db
+
+  django:
+    build: .
+    container_name: eprokesba_django
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code  # Mount seluruh proyek ke /code di container
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DJANGO_DEBUG=${DJANGO_DEBUG}
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
+    depends_on:
+      - db
+    command: >
+      sh -c "cd /code &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+
+volumes:
+  mysql_data:
