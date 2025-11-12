@@ -26,6 +26,16 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='').split(',')
 
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'  # setelah login → ke dashboard (/)
+LOGOUT_REDIRECT_URL = '/login/'
+
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 # Application definition
 
