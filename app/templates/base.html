@@ -2,7 +2,6 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Eprokesba{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -13,12 +12,12 @@
         <aside class="sidebar">
             <h2>TokoHijau</h2>
             <nav>
-                <a href="{% url 'dashboard' %}" {% if request.path == '/' or request.path == '/dashboard/' %}class="active"{% endif %}>Dashboard</a>
-                <a href="{% url 'produk' %}" {% if request.path == '/produk/' %}class="active"{% endif %}>Kelola Produk</a>
-                <a href="{% url 'transaksi' %}" {% if request.path == '/transaksi/' %}class="active"{% endif %}>Kelola Transaksi</a>
-                <a href="{% url 'laporan' %}" {% if request.path == '/laporan/' %}class="active"{% endif %}>Laporan</a>
-                <a href="{% url 'penjual' %}" {% if request.path == '/penjual/' %}class="active"{% endif %}>Kelola Penjual</a>
-                <a href="{% url 'pembeli' %}" {% if request.path == '/pembeli/' %}class="active"{% endif %}>Kelola Pembeli</a>
+                <a href="{% url 'dashboard' %}" {% if request.resolver_match.url_name == 'dashboard' %}class="active"{% endif %}>Dashboard</a>
+                <a href="{% url 'produk' %}" {% if request.resolver_match.url_name == 'produk' %}class="active"{% endif %}>Kelola Produk</a>
+                <a href="{% url 'transaksi' %}" {% if request.resolver_match.url_name == 'transaksi' %}class="active"{% endif %}>Kelola Transaksi</a>
+                <a href="{% url 'laporan' %}" {% if request.resolver_match.url_name == 'laporan' %}class="active"{% endif %}>Laporan</a>
+                <a href="{% url 'penjual' %}" {% if request.resolver_match.url_name == 'penjual' %}class="active"{% endif %}>Kelola Penjual</a>
+                <a href="{% url 'pembeli' %}" {% if request.resolver_match.url_name == 'pembeli' %}class="active"{% endif %}>Kelola Pembeli</a>
                 <a href="{% url 'logout' %}">Logout ({{ user.username }})</a>
             </nav>
         </aside>

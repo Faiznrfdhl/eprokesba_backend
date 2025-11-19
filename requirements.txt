@@ -1,3 +1,11 @@
 Django==5.0.6
 mysqlclient==2.2.4
 python-decouple==3.8
+djangorestframework==3.14.0             #pip install djangorestframework
+djangorestframework-simplejwt==5.2.2    #pip install djangorestframework-simplejwt
+
+
+#required to install in docker-compose exec django pip install .....
+
+#pip install djangorestframework
+#pip install djangorestframework-simplejwt

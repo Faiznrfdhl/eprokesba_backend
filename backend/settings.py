@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'rest_framework',                  #djangorestframework
+    'rest_framework.authtoken',        #restframeworkauthtoken
+    'rest_framework_simplejwt',        #djangorestframework-simplejwt
 ]
 
 MIDDLEWARE = [
@@ -116,6 +119,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# --- REST Framework Settings ---
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        # atau kalau pilih JWT:
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # semua endpoint butuh auth
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
