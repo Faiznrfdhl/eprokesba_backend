@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 
 class Admin(models.Model):
     id_admin = models.AutoField(primary_key=True)
@@ -8,7 +7,8 @@ class Admin(models.Model):
 
 class Penjual(models.Model):
     id_penjual = models.AutoField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # ✅ OneToOne
+    password = models.CharField(max_length=255, default="")
+    email = models.EmailField(unique=True)
     nama_penjual = models.CharField(max_length=100)
     no_telepon = models.CharField(max_length=15)
     status_toko = models.CharField(max_length=50, default="Aktif")
@@ -17,10 +17,10 @@ class Penjual(models.Model):
 
 class Pembeli(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # ✅ OneToOne
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=255, default="")
     alamat = models.TextField()
     no_telepon = models.CharField(max_length=15)
-    email = models.EmailField()
 
 class Kategori(models.Model):
     id_kategori = models.AutoField(primary_key=True)
@@ -39,7 +39,6 @@ class Transaksi(models.Model):
     id_transaksi = models.AutoField(primary_key=True)
     id_pembeli = models.ForeignKey(Pembeli, on_delete=models.CASCADE)
     id_penjual = models.ForeignKey(Penjual, on_delete=models.CASCADE)
-    id_pembayaran = models.ForeignKey('Pembayaran', on_delete=models.CASCADE)
     alamat = models.TextField()
     total_harga = models.DecimalField(max_digits=10, decimal_places=2)
     status_transaksi = models.CharField(max_length=50, default="Pending")

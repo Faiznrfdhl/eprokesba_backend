@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, api_views
+from . import views
 
 urlpatterns = [
     # Web
@@ -12,7 +12,5 @@ urlpatterns = [
     path('penjual/', views.penjual, name='penjual'),
     path('pembeli/', views.pembeli, name='pembeli'),
 
-    # API (untuk mobile)
-    path('api/login/', api_views.api_login, name='api-login'),
-    path('api/register/', api_views.api_register, name='api-register'),
+
 ]
