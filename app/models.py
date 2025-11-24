@@ -42,7 +42,10 @@ class Transaksi(models.Model):
     alamat = models.TextField()
     total_harga = models.DecimalField(max_digits=10, decimal_places=2)
     status_transaksi = models.CharField(max_length=50, default="Pending")
-
+    
+    def __str__(self):
+        return f"Transaksi {self.id_transaksi}"
+    
 class Pembayaran(models.Model):
     id_pembayaran = models.AutoField(primary_key=True)
     id_transaksi = models.ForeignKey(Transaksi, on_delete=models.CASCADE)
@@ -55,7 +58,7 @@ class Pengiriman(models.Model):
     id_transaksi = models.ForeignKey(Transaksi, on_delete=models.CASCADE)
     alamat_pembeli = models.TextField()
     metode_pengiriman = models.CharField(max_length=100)
-    no_resi = models.CharField(max_length=100, blank=True, null=True)
+    no_resi = models.CharField(max_length=100, null=True, blank=True)
 
 class Chat(models.Model):
     id_chat = models.AutoField(primary_key=True)
