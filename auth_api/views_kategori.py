@@ -1,65 +1,95 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.permissions import AllowAny
+from django.shortcuts import get_object_or_404
+
 from app.models import Kategori
-from .serializers import KategoriSerializer
 
 
-# =========================================
-# LIST SEMUA KATEGORI (untuk pembeli/penjual)
-# =========================================
+# ============================
+# CREATE KATEGORI
+# ============================
+class KategoriTambahView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        nama = request.data.get("nama_kategori")
+        deskripsi = request.data.get("deskripsi_kategori")
+
+        if not nama:
+            return Response({"error": "Nama kategori wajib diisi"}, status=400)
+
+        kategori = Kategori.objects.create(
+            nama_kategori=nama,
+            deskripsi_kategori=deskripsi
+        )
+
+        return Response({
+            "message": "Kategori berhasil dibuat",
+            "id_kategori": kategori.id_kategori
+        }, status=201)
+
+
+# ============================
+# LIST SEMUA KATEGORI
+# ============================
 class KategoriListView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        kategori = Kategori.objects.all()
-        serializer = KategoriSerializer(kategori, many=True)
-        return Response(serializer.data)
+        data = []
+
+        for item in Kategori.objects.all():
+            data.append({
+                "id_kategori": item.id_kategori,
+                "nama_kategori": item.nama_kategori,
+                "deskripsi_kategori": item.deskripsi_kategori
+            })
+
+        return Response(data, status=200)
 
 
-# =========================================
-# TAMBAH KATEGORI (Admin)
-# =========================================
-class KategoriTambahView(APIView):
+# ============================
+# DETAIL KATEGORI
+# ============================
+class KategoriDetailView(APIView):
     permission_classes = [AllowAny]
-    
-    def post(self, request):
-        serializer = KategoriSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Kategori berhasil dibuat"}, status=201)
-        return Response(serializer.errors, status=400)
+
+    def get(self, request, id_kategori):
+        kategori = get_object_or_404(Kategori, id_kategori=id_kategori)
+
+        return Response({
+            "id_kategori": kategori.id_kategori,
+            "nama_kategori": kategori.nama_kategori,
+            "deskripsi_kategori": kategori.deskripsi_kategori
+        }, status=200)
 
 
-# =========================================
-# UPDATE KATEGORI (Admin)
-# =========================================
+# ============================
+# UPDATE KATEGORI
+# ============================
 class KategoriUpdateView(APIView):
     permission_classes = [AllowAny]
-    
-    def put(self, request, id):
-        try:
-            kategori = Kategori.objects.get(id_kategori=id)
-        except Kategori.DoesNotExist:
-            return Response({"error": "Kategori tidak ditemukan"}, status=404)
 
-        serializer = KategoriSerializer(kategori, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Kategori berhasil diupdate"})
-        return Response(serializer.errors, status=400)
+    def put(self, request, id_kategori):
+        kategori = get_object_or_404(Kategori, id_kategori=id_kategori)
+
+        kategori.nama_kategori = request.data.get("nama_kategori", kategori.nama_kategori)
+        kategori.deskripsi_kategori = request.data.get("deskripsi_kategori", kategori.deskripsi_kategori)
+        kategori.save()
+
+        return Response({"message": "Kategori berhasil diperbarui"}, status=200)
 
 
-# =========================================
-# HAPUS KATEGORI (Admin)
-# =========================================
+# ============================
+# DELETE KATEGORI
+# ============================
 class KategoriDeleteView(APIView):
     permission_classes = [AllowAny]
 
-    def delete(self, request, id):
-        try:
-            kategori = Kategori.objects.get(id_kategori=id)
-            kategori.delete()
-            return Response({"message": "Kategori berhasil dihapus"})
-        except Kategori.DoesNotExist:
-            return Response({"error": "Kategori tidak ditemukan"}, status=404)
+    def delete(self, request, id_kategori):
+        kategori = get_object_or_404(Kategori, id_kategori=id_kategori)
+        kategori.delete()
+
+        return Response({"message": "Kategori berhasil dihapus"}, status=200)

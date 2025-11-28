@@ -7,8 +7,6 @@ from .serializers import (
     LoginSerializer,
     PembeliRegisterSerializer,
     PenjualRegisterSerializer,
-    ProdukSerializer,
-    KategoriSerializer
 )
 
 
@@ -110,46 +108,3 @@ class LoginPembeliView(APIView):
 
         except Pembeli.DoesNotExist:
             return Response({"error": "Akun pembeli tidak ditemukan"}, status=404)
-        
-        
-# ================================
-# LIST SEMUA TRANSAKSI (Admin)
-# ================================
-class ListTransaksiView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request):
-        transaksi = Transaksi.objects.all()
-        serializer = TransaksiSerializer(transaksi, many=True)
-        return Response(serializer.data)
-
-# ================================
-# UPDATE STATUS PEMBAYARAN
-# ================================
-class UpdateStatusPengirimanView(APIView):
-    permission_classes = [AllowAny]
-
-    def patch(self, request, id):
-        try:
-            transaksi = Transaksi.objects.get(id_transaksi=id)
-        except Transaksi.DoesNotExist:
-            return Response({"error": "Transaksi tidak ditemukan"}, status=404)
-
-        status_transaksi = request.data.get("status_transaksi", transaksi.status_transaksi)
-        resi = request.data.get("resi", transaksi.resi)
-
-        transaksi.status_transaksi = status_transaksi
-        transaksi.resi = resi
-        transaksi.save()
-
-        # Sinkron ke tabel pengiriman
-        from app.models import Pengiriman  # pastikan model import
-        Pengiriman.objects.update_or_create(
-            transaksi=transaksi,
-            defaults={
-                "status_pengiriman": status_transaksi,
-                "resi": resi
-            }
-        )
-
-        return Response({"message": "Status pengiriman berhasil diperbarui"})
