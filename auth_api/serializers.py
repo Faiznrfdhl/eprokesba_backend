@@ -1,9 +1,17 @@
 from rest_framework import serializers
 from app.models import (
-    Penjual, Pembeli, Produk, 
-    Kategori, Transaksi, Pembayaran, 
-    Pengiriman,
+    Admin, Penjual, Pembeli, Kategori, Produk,
+    Keranjang, KeranjangItem, Transaksi, TransaksiItem,
+    Pembayaran, Pengiriman, Chat, Ulasan
 )
+
+# =========================
+#   ADMIN SERIALIZER
+# =========================
+class AdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Admin
+        fields = '__all__'
 
 # -------------------------
 # REGISTER PENJUAL
@@ -11,8 +19,10 @@ from app.models import (
 class PenjualRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Penjual
-        fields = ['email', 'password', 'nama_penjual', 'no_telepon', 'alamat_toko']
+        fields = ['nama_penjual', 'email', 'password', 'no_telepon', 'alamat_toko']
 
+    def create(self, validated_data):
+        return Penjual.objects.create(**validated_data)
 
 # -------------------------
 # REGISTER PEMBELI
@@ -20,7 +30,10 @@ class PenjualRegisterSerializer(serializers.ModelSerializer):
 class PembeliRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pembeli
-        fields = ['email', 'password', 'alamat', 'no_telepon']
+        fields = ['nama', 'email', 'password', 'alamat', 'no_telepon']
+
+    def create(self, validated_data):
+        return Pembeli.objects.create(**validated_data)
 
 
 # -------------------------
@@ -39,29 +52,90 @@ class ProdukSerializer(serializers.ModelSerializer):
         model = Produk
         fields = '__all__'
 
+# ------------------------
+# KATEGORI SERIALIZER  
+# ------------------------
 class KategoriSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kategori
         fields = '__all__'
 
+# ------------------------
+# KERANJANG SERIALIZER
+# ------------------------
+class KeranjangSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Keranjang
+        fields = '__all__'
+
+
+class KeranjangItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KeranjangItem
+        fields = '__all__'
+
+
+# ------------------------
+# TRANSAKSI SERIALIZER
+# ------------------------
 class TransaksiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaksi
         fields = '__all__'
 
+#CREATE TRANSAKSI SERIALIZER
 class TransaksiCreateSerializer(serializers.Serializer):
-    id_pembeli = serializers.IntegerField()
-    id_penjual = serializers.IntegerField()
+    pembeli = serializers.IntegerField()
+    penjual = serializers.IntegerField()
     alamat = serializers.CharField()
-    total_harga = serializers.DecimalField(max_digits=10, decimal_places=2)
-    metode_pembayaran = serializers.CharField()
+    total_harga = serializers.DecimalField(max_digits=12, decimal_places=2)
+
+#ITEM TRANSAKSI SERIALIZER
+class TransaksiItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TransaksiItem
+        fields = '__all__'
+        
+# ------------------------
+# PEMBAYARAN SERIALIZER
+# ------------------------
+class PembayaranSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pembayaran
+        fields = '__all__'
+
 
 class UpdateStatusPembayaranSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pembayaran
         fields = ['status_pembayaran']
 
+# ------------------------
+# PENGIRIMAN SERIALIZER
+# ------------------------
+class PengirimanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pengiriman
+        fields = '__all__'
+
+
 class UpdatePengirimanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pengiriman
-        fields = ["no_resi"]
+        fields = ['no_resi']
+
+# ------------------------
+# CHAT SERIALIZER
+# ------------------------
+class ChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chat
+        fields = '__all__'
+
+# ------------------------
+# ULASAN SERIALIZER
+# ------------------------
+class UlasanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ulasan
+        fields = '__all__'

@@ -2,15 +2,13 @@ from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from app.models import Penjual, Pembeli, Transaksi, Pengiriman, Pembayaran, Pengiriman
+from app.models import ( Penjual, Pembeli)
 from .serializers import (
     LoginSerializer,
     PembeliRegisterSerializer,
     PenjualRegisterSerializer,
     ProdukSerializer,
-    KategoriSerializer,
-    TransaksiSerializer,
-    UpdatePengirimanSerializer,
+    KategoriSerializer
 )
 
 
@@ -155,21 +153,3 @@ class UpdateStatusPengirimanView(APIView):
         )
 
         return Response({"message": "Status pengiriman berhasil diperbarui"})
-
-# ================================
-# UPDATE PENGIRIMAN
-# ================================
-class UpdatePengirimanView(APIView):
-    permission_classes = [AllowAny]
-    
-    def put(self, request, id_pengiriman):
-        try:
-            pengiriman = Pengiriman.objects.get(id_pengiriman=id_pengiriman)
-        except Pengiriman.DoesNotExist:
-            return Response({"error": "Pengiriman tidak ditemukan"}, status=404)
-
-        serializer = UpdatePengirimanSerializer(pengiriman, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Pengiriman updated", "data": serializer.data})
-        return Response(serializer.errors, status=400)
