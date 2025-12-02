@@ -60,14 +60,14 @@ class UlasanBuatView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        id_pembeli = request.data.get("id_pembeli")
-        id_produk = request.data.get("id_produk")
+        id_pembeli = request.data.get("pembeli_id")
+        id_produk = request.data.get("produk_id")
         rating = request.data.get("rating")
         komentar = request.data.get("komentar")
 
         # Validasi
         if not all([id_pembeli, id_produk, rating]):
-            return Response({"error": "id_pembeli, id_produk, dan rating wajib diisi"}, status=400)
+            return Response({"error": "pembeli_id, produk_id, dan rating wajib diisi"}, status=400)
 
         if int(rating) not in [1, 2, 3, 4, 5]:
             return Response({"error": "Rating harus 1-5"}, status=400)

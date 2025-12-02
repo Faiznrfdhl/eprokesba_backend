@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'auth_api',
+    'corsheaders',                    #django-cors-headers
     'rest_framework',                  #djangorestframework
     'rest_framework.authtoken',        #restframeworkauthtoken
     'rest_framework_simplejwt',        #djangorestframework-simplejwt
@@ -61,7 +62,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  #django-cors-headers
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True  #django-cors-headers
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -138,7 +142,7 @@ REST_FRAMEWORK = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 

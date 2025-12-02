@@ -34,15 +34,18 @@ class PengirimanListView(APIView):
 class PengirimanBuatView(APIView):
     permission_classes = [AllowAny]
 
-    def post(self, request):
-        id_transaksi = request.data.get("id_transaksi")
+    def post(self, request, id_transaksi=None):
         metode = request.data.get("metode_pengiriman")
         alamat = request.data.get("alamat_pembeli")
-
-        if not all([id_transaksi, metode, alamat]):
-            return Response({"error": "id_transaksi, metode_pengiriman, dan alamat_pembeli wajib diisi"}, status=400)
-
-        transaksi = get_object_or_404(Transaksi, id_transaksi=id_transaksi)
+        
+        transaksi_id = id_transaksi or request.data.get("transaksi_id")
+        
+        if not all([transaksi_id, metode, alamat]):
+            return Response({
+                "error": "transaksi_id, metode_pengiriman, dan alamat_pembeli wajib diisi"
+            }, status=400)
+            
+        transaksi = get_object_or_404(Transaksi, id_transaksi=transaksi_id)
 
         # Cek apakah sudah ada data pengiriman
         if Pengiriman.objects.filter(transaksi=transaksi).exists():
@@ -52,13 +55,14 @@ class PengirimanBuatView(APIView):
             transaksi=transaksi,
             metode_pengiriman=metode,
             alamat_pembeli=alamat,
-            no_resi=None
+            no_resi=request.data.get("no_resi")
         )
 
         return Response({
             "message": "Pengiriman berhasil dibuat",
             "id_transaksi": transaksi.id_transaksi,
             "metode_pengiriman": pengiriman.metode_pengiriman,
+            "no_resi": pengiriman.no_resi
         }, status=201)
 
 

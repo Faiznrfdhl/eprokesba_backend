@@ -34,16 +34,16 @@ class PembayaranListView(APIView):
 class PembayaranBuatView(APIView):
     permission_classes = [AllowAny]
 
-    def post(self, request):
-        id_transaksi = request.data.get("id_transaksi")
+    def post(self, request, id_transaksi=None):
         metode = request.data.get("metode_pembayaran")
         jumlah = request.data.get("jumlah_pembayaran")
 
-        if not all([id_transaksi, metode, jumlah]):
-            return Response({"error": "id_transaksi, metode_pembayaran dan jumlah_pembayaran wajib diisi"}, status=400)
+        transaksi_id = id_transaksi or request.data.get("transaksi_id")
+        
+        if not all([transaksi_id, metode, jumlah]):
+            return Response({"error": "transaksi_id, metode_pembayaran dan jumlah_pembayaran wajib diisi"}, status=400)
 
-        transaksi = get_object_or_404(Transaksi, id_transaksi=id_transaksi)
-
+        transaksi = get_object_or_404(Transaksi, id_transaksi=transaksi_id)
         # Cek apakah sudah ada pembayaran
         if Pembayaran.objects.filter(transaksi=transaksi).exists():
             return Response({"error": "Pembayaran untuk transaksi ini sudah ada"}, status=400)

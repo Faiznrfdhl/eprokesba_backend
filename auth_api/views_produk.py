@@ -15,25 +15,25 @@ class ProdukTambahView(APIView):
 
     def post(self, request):
         nama = request.data.get("nama_produk")
-        deskripsi = request.data.get("deskripsi_produk")
         harga = request.data.get("harga_produk")
-        stok = request.data.get("stok_produk")
-        id_penjual = request.data.get("id_penjual")
-        id_kategori = request.data.get("id_kategori")
+        stok = request.data.get("stok")
+        deskripsi = request.data.get("deskripsi")
+        kategori_id = request.data.get("kategori_id")
+        penjual_id = request.data.get("penjual_id")
 
-        if not all([nama, harga, stok, id_penjual, id_kategori]):
+        if not all([nama, harga, stok, penjual_id, kategori_id]):
             return Response({"error": "Semua field wajib diisi"}, status=400)
 
-        penjual = get_object_or_404(Penjual, id_penjual=id_penjual)
-        kategori = get_object_or_404(Kategori, id_kategori=id_kategori)
-
+        penjual = get_object_or_404(Penjual, id_penjual=penjual_id)
+        kategori = get_object_or_404(Kategori, id_kategori=kategori_id)
+        
         produk = Produk.objects.create(
             nama_produk=nama,
-            deskripsi_produk=deskripsi,
             harga_produk=harga,
-            stok_produk=stok,
-            id_penjual=penjual,
-            id_kategori=kategori
+            stok=stok,
+            deskripsi=deskripsi,
+            penjual=penjual,
+            kategori=kategori
         )
 
         return Response({

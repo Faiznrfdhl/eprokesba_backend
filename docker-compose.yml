@@ -32,6 +32,8 @@ services:
       - db
 
   django:
+    env_file:
+      - .env
     build: .
     container_name: eprokesba_django
     restart: always

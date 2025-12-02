@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.hashers import make_password, check_password
 from app.models import (
     Admin, Penjual, Pembeli, Kategori, Produk,
     Keranjang, KeranjangItem, Transaksi, TransaksiItem,
@@ -20,9 +21,11 @@ class PenjualRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Penjual
         fields = ['nama_penjual', 'email', 'password', 'no_telepon', 'alamat_toko']
-
+        extra_kwargs = {'password': {'write_only': True}}
+        
     def create(self, validated_data):
-        return Penjual.objects.create(**validated_data)
+        validated_data['password'] = make_password(validated_data['password'])
+        return super().create(validated_data)
 
 # -------------------------
 # REGISTER PEMBELI
@@ -31,16 +34,18 @@ class PembeliRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pembeli
         fields = ['nama', 'email', 'password', 'alamat', 'no_telepon']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        return Pembeli.objects.create(**validated_data)
+        validated_data['password'] = make_password(validated_data['password'])
+        return super().create(validated_data)
 
 
 # -------------------------
 # LOGIN (UNTUK PEMBELI & PENJUAL)
 # -------------------------
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    no_telepon = serializers.CharField()
     password = serializers.CharField()
     
 # ------------------------

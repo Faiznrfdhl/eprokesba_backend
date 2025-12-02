@@ -31,7 +31,7 @@ from .views_kategori import (
 # KERANJANG # UPDATE ITEM???
 #=============================
 from .views_keranjang import (
-    KeranjangTambahView,
+    KeranjangTambahItemView,
     KeranjangListView,
     KeranjangUpdateView,
     KeranjangHapusItemView,
@@ -121,7 +121,7 @@ urlpatterns = [
     path('kategori/delete/<int:id>/', KategoriDeleteView.as_view()),
 
     # KERANJANG
-    path('keranjang/tambah/', KeranjangTambahView.as_view()),
+    path('keranjang/tambah/<int:id_pembeli>/', KeranjangTambahItemView.as_view()),
     path('keranjang/list/<int:id_pembeli>/', KeranjangListView.as_view()),
     path('keranjang/update/<int:id_keranjang>/', KeranjangUpdateView.as_view()),
     path('keranjang/hapus-item/<int:id_keranjang>/', KeranjangHapusItemView.as_view()),
@@ -156,6 +156,7 @@ urlpatterns = [
     path('ulasan/<int:id_ulasan>/', UlasanDetailView.as_view()),
     path('ulasan/update/<int:id_ulasan>/', UlasanUpdateView.as_view()),  # ★ TAMBAHAN FIX
     path('ulasan/hapus/<int:id_ulasan>/', UlasanHapusView.as_view()),
+    
     # CHAT
     path('chat/list/', ChatListView.as_view()),
     path('chat/user/<int:id_pembeli>/<int:id_penjual>/', ChatByUserView.as_view()),

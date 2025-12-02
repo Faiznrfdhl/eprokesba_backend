@@ -17,8 +17,8 @@ class TransaksiBuatView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        id_pembeli = request.data.get("id_pembeli")
-        id_penjual = request.data.get("id_penjual")
+        id_pembeli = request.data.get("pembeli_id")
+        id_penjual = request.data.get("penjual_id")
         alamat = request.data.get("alamat")
 
         if not all([id_pembeli, id_penjual, alamat]):

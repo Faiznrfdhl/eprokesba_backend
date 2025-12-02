@@ -1,3 +1,4 @@
+from django.utils.timezone import localtime
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -6,6 +7,30 @@ from django.shortcuts import get_object_or_404
 
 from app.models import Chat, Pembeli, Penjual
 
+BULAN_INDONESIA = {
+    1: "Januari",
+    2: "Februari",
+    3: "Maret",
+    4: "April",
+    5: "Mei",
+    6: "Juni",
+    7: "Juli",
+    8: "Agustus",
+    9: "September",
+    10: "Oktober",
+    11: "November",
+    12: "Desember",
+}
+
+def format_waktu_indonesia(waktu):
+    waktu_local = localtime(waktu)
+    hari = waktu_local.day
+    bulan = BULAN_INDONESIA[waktu_local.month]
+    tahun = waktu_local.year
+    jam = waktu_local.hour
+    menit = waktu_local.minute
+    detik = waktu_local.second
+    return f"{hari} {bulan} {tahun} {jam:02d}:{menit:02d}"
 
 # ======================================================
 # LIST SEMUA CHAT (opsional)
@@ -24,7 +49,7 @@ class ChatListView(APIView):
                 "penjual": c.penjual.nama_penjual,
                 "pengirim": c.pengirim,
                 "pesan": c.isi_pesan,
-                "waktu": c.waktu,
+                "waktu": format_waktu_indonesia(c.waktu)
             })
 
         return Response(data, status=200)
@@ -51,7 +76,7 @@ class ChatByUserView(APIView):
                 "id_chat": c.id_chat,
                 "pengirim": c.pengirim,
                 "pesan": c.isi_pesan,
-                "waktu": c.waktu,
+                "waktu": format_waktu_indonesia(c.waktu)
             })
 
         return Response(data, status=200)
@@ -84,6 +109,7 @@ class ChatBuatView(APIView):
             pengirim=pengirim,
             isi_pesan=pesan
         )
+        
 
         return Response({
             "message": "Pesan berhasil dikirim",
@@ -91,6 +117,7 @@ class ChatBuatView(APIView):
             "pengirim": chat.pengirim,
             "pesan": chat.isi_pesan,
             "waktu": chat.waktu,
+            "waktu": format_waktu_indonesia(chat.waktu)
         }, status=201)
 
 
@@ -109,7 +136,7 @@ class ChatDetailView(APIView):
             "penjual": chat.penjual.nama_penjual,
             "pengirim": chat.pengirim,
             "pesan": chat.isi_pesan,
-            "waktu": chat.waktu,
+            "waktu": format_waktu_indonesia(chat.waktu),
         }, status=200)
 
 
