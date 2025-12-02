@@ -1,16 +1,33 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Laporan & Analisis - Admin Panel{% endblock %}
-
+{% block title %}Laporan & Analisis - Eprokesba{% endblock %}
 {% block extra_css %}
+
+{{ chart_labels|json_script:"chart-labels" }}
+{{ chart_data|json_script:"chart-data" }}
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = JSON.parse(document.getElementById("chart-labels").textContent);
+    const data = JSON.parse(document.getElementById("chart-data").textContent);
+
+    new Chart(document.getElementById("myChart"), {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Jumlah Produk per Penjual",
+                data: data
+            }]
+        }
+    });
+</script>
 {% endblock %}
 
 {% block content %}
 <header>
-  <h1>📊 Laporan & Analisis Transaksi</h1>
+  <h1>Laporan & Analisis Transaksi</h1>
 </header>
 
 <section class="filter-section">
@@ -31,11 +48,12 @@
 </section>
 
 <section class="summary">
-  <div class="card"><h3>Total Transaksi</h3><p>1,248</p></div>
-  <div class="card"><h3>Total Penjual Aktif</h3><p>56</p></div>
-  <div class="card"><h3>Total Pembeli</h3><p>912</p></div>
-  <div class="card"><h3>Total Pendapatan</h3><p>Rp 320.450.000</p></div>
+  <div class="card"><h3>Total Transaksi</h3><p>{{ total_transaksi }}</p></div>
+  <div class="card"><h3>Total Penjual Aktif</h3><p>{{ total_penjual }}</p></div>
+  <div class="card"><h3>Total Pembeli</h3><p>{{ total_pembeli }}</p></div>
+  <div class="card"><h3>Total Pendapatan</h3><p>Rp {{ total_pendapatan }}</p></div>
 </section>
+
 
 <section class="chart-section">
   <h2>Grafik Penjualan per Bulan</h2>
@@ -47,14 +65,31 @@
   <table>
     <thead>
       <tr>
-        <th>No</th><th>ID Transaksi</th><th>Pembeli</th><th>Penjual</th><th>Produk</th><th>Total</th><th>Status</th><th>Tanggal</th>
+        <th>No</th>
+        <th>ID Transaksi</th>
+        <th>Pembeli</th>
+        <th>Penjual</th>
+        <th>Produk</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Tanggal</th>
       </tr>
     </thead>
-    <tbody>
-      <tr><td>1</td><td>TRX001</td><td>Dewi</td><td>Rama Store</td><td>Sabun Cuci Baju</td><td>Rp 45.000</td><td>Selesai</td><td>2025-10-12</td></tr>
-      <tr><td>2</td><td>TRX002</td><td>Andi</td><td>Sinar Bersih</td><td>Pewangi</td><td>Rp 30.000</td><td>Selesai</td><td>2025-10-18</td></tr>
-      <tr><td>3</td><td>TRX003</td><td>Lina</td><td>Cerah Mart</td><td>Sabun Piring</td><td>Rp 20.000</td><td>Pending</td><td>2025-10-21</td></tr>
-    </tbody>
+<tbody>
+  {% for t in transaksi_list %}
+  <tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ t.id }}</td>
+    <td>{{ t.pembeli }}</td>
+    <td>{{ t.penjual }}</td>
+    <td>{{ t.produk }}</td>
+    <td>Rp {{ t.total }}</td>
+    <td>{{ t.status }}</td>
+    <td>{{ t.tanggal }}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+
   </table>
 
   <div class="export-buttons">

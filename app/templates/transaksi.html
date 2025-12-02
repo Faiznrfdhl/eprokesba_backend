@@ -1,9 +1,32 @@
 {% extends 'base.html' %}
-{% block title %}Kelola Transaksi{% endblock %}
+{% block title %}Kelola Transaksi - Eprokesba{% endblock %}
 {% block content %}
+
 <h1>Kelola Transaksi</h1>
 <table class="table">
-  <tr><th>ID</th><th>Pembeli</th><th>Produk</th><th>Status</th></tr>
-  <tr><td>1</td><td>Dewi</td><td>Sabun Cuci Baju</td><td>Selesai</td></tr>
+
+  <tr>
+    <th>ID Transaksi</th>
+    <th>Penjual</th>
+    <th>Pembeli</th>
+    <th>Produk</th>
+    <th>Total Jumlah</th>
+    <th>Harga</th>
+    <th>Tanggal</th>
+    <th>Status</th>
+  </tr>
+  {% for t in transaksi_list %}
+  <tr>
+    <td>{{ t.id }}</td>
+    <td>{{ t.penjual }}</td>
+    <td>{{ t.pembeli }}</td>
+    <td>{{ t.produk }}</td>
+    <td>{{ t.total_jumlah }}</td>
+    <td>Rp {{ t.harga }}</td>
+    <td>{{ t.tanggal }}</td>
+    <td>{{ t.status }}</td>
+  </tr>
+  {% endfor %}
+
 </table>
 {% endblock %}

@@ -1,9 +1,27 @@
 {% extends 'base.html' %}
-{% block title %}Kelola Penjual - TokoHijau{% endblock %}
+{% block title %}Kelola Penjual - Eprokesba{% endblock %}
 {% block content %}
+
 <h1>Kelola Penjual</h1>
 <table class="table">
-  <tr><th>ID</th><th>Nama Penjual</th><th>Email</th><th>Aksi</th></tr>
-  <tr><td>1</td><td>Ahmad</td><td>ahmad@tokohijau.com</td><td><button>Edit</button></td></tr>
+  
+  <tr><th>ID</th>
+    <th>Nama Penjual</th>
+    <th>Email</th>
+    <th>Alamat</th>
+    <th>No. Telepon</th>
+    <th>Status Toko</th>
+  </tr>
+  {% for penjual in penjual_list %}
+  <tr>
+    <td>{{ penjual.id_penjual }}</td>
+    <td>{{ penjual.nama_penjual }}</td>
+    <td>{{ penjual.email }}</td>
+    <td>{{ penjual.alamat_toko }}</td>
+    <td>{{ penjual.no_telepon }}</td>
+    <td>{{ penjual.status_toko }}</td>
+  </tr>
+  {% endfor %}
+  
 </table>
 {% endblock %}
