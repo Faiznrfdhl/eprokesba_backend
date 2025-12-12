@@ -26,12 +26,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 
 # Izinkan localhost, 127.0.0.1, dan semua IP di jaringan lokal (192.168.x.x)
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '192.168.1.2',
-    '10.0.2.0/24',
-]
+ALLOWED_HOSTS = ['*']
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'  # setelah login → ke dashboard (/)
 LOGOUT_REDIRECT_URL = '/login/'
