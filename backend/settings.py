@@ -26,9 +26,11 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 
 # Izinkan localhost, 127.0.0.1, dan semua IP di jaringan lokal (192.168.x.x)
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]'] + [
-    '192.168.1.2',  # ← IP laptop-mu dari ipconfig
-    '192.168.1.0/24',  # ← semua device di jaringan Wi-Fi yang sama
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '192.168.1.2',
+    '10.0.2.0/24',
 ]
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'  # setelah login → ke dashboard (/)
