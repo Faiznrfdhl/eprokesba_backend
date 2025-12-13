@@ -24,9 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='').split(',')
 
-# Izinkan localhost, 127.0.0.1, dan semua IP di jaringan lokal (192.168.x.x)
-ALLOWED_HOSTS = ['*']
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'  # setelah login → ke dashboard (/)
 LOGOUT_REDIRECT_URL = '/login/'
