@@ -7,7 +7,8 @@ from .views import (
     RegisterPenjualView,
     RegisterPembeliView,
     LoginPembeliView,
-    LoginPenjualView
+    LoginPenjualView,
+    # ProfilePembeliView
 )
 
 #===========================
@@ -103,6 +104,7 @@ urlpatterns = [
     path('register/pembeli/', RegisterPembeliView.as_view()),
     path('login/penjual/', LoginPenjualView.as_view()),
     path('login/pembeli/', LoginPembeliView.as_view()),
+    # path('api/profile/pembeli/', ProfilePembeliView.as_view()),
 
     # PRODUK
     path('produk/', ProdukListView.as_view()),

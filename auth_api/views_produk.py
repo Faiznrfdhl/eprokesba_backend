@@ -55,13 +55,13 @@ class ProdukListView(APIView):
             output.append({
                 "id_produk": p.id_produk,
                 "nama_produk": p.nama_produk,
-                "deskripsi_produk": p.deskripsi_produk,
+                "deskripsi_produk": p.deskripsi,
                 "harga_produk": p.harga_produk,
-                "stok_produk": p.stok_produk,
-                "id_penjual": p.id_penjual.id_penjual,
-                "nama_penjual": p.id_penjual.nama_penjual,
-                "id_kategori": p.id_kategori.id_kategori,
-                "nama_kategori": p.id_kategori.nama_kategori,
+                "stok_produk": p.stok,
+                "id_penjual": p.penjual.id_penjual,
+                "nama_penjual": p.penjual.nama_penjual,
+                "id_kategori": p.kategori.id_kategori if p.kategori else None,
+                "nama_kategori": p.kategori.nama_kategori if p.kategori else "Tanpa Kategori",
             })
 
         return Response(output, status=200)
