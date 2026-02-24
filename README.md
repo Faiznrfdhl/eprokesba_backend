@@ -1,5 +1,5 @@
 # Backend
-Deskripsi singkat aplikasi ini. Jelaskan secara ringkas tujuan aplikasi dan masalah apa yang ingin diselesaikan.
+Backend REST API API dibangun menggunakan Django REST Framework.
 ---
 
 ## Description
